@@ -39,7 +39,7 @@
                     <a href="<?=base_url('kriteria')?>"><i class="fa fa-table fa-fw"></i> Data Kriteria</a>
                 </li>
                 <li>
-                    <a href="<?=base_url('dosen')?>"><i class="fa fa-table fa-fw"></i> Data Calon Penerima</a>
+                    <a href="<?=base_url('dosen')?>"><i class="fa fa-table fa-fw"></i> Data Dosen</a>
                 </li>
                 <li>
                     <a href="<?=base_url('proses')?>"><i class="fa fa-edit fa-fw"></i>Proses & Hasil Seleksi</a>

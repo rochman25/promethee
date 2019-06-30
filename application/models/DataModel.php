@@ -76,6 +76,10 @@ class DataModel extends CI_Model
         return $query;
     }
 
+    function getInsertId(){
+        return $this->db->insert_id();
+    }
+
     function Login($table, $where)
     {
         return $this->db->get_where($table, $where);

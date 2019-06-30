@@ -35,7 +35,7 @@
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <form action="index.php?url=hasil_seleksi" method="POST">
+                            <form action="<?=base_url()?>proses/seleksi" method="POST">
                                 <div class="col-lg-12">
                                     <table class="table table-bordered">
                                         <thead>
@@ -54,7 +54,7 @@
                                         </thead>
                                         <tbody>
                                             <?php $x= 1; ?>
-                                            <?php foreach ($kriteria as $key => $value): ?>
+                                            <?php foreach ($data_kriteria['data'] as $key => $value): ?>
                                             <tr>
                                                 <td><?php echo $x++ ?></td>
                                                 <td><?php echo $key ?></td>
@@ -85,8 +85,7 @@
                                     </table>
                                 </div>
                                 <div class="col-lg-12" align="center">
-                                    <button class="btn btn-lg btn-info"><i class="  fa fa-refresh"></i> Mulai
-                                        Seleksi</button>
+                                    <input type="submit" class="btn btn-lg btn-info" name="kirim" value="Mulai Seleksi">
                                 </div>
                             </form>
 
