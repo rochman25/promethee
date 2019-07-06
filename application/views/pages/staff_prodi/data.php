@@ -20,7 +20,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Data Dosen</h1>
+                    <h1 class="page-header">Data Periode </h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -30,11 +30,13 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading" style="padding-bottom: 20px">
                             <div>
-                                Tabel Dosen
-                                <a href="<?=base_url()?>assets/data_dosen/format.xls" class="btn btn-sm btn-info" style="float:right; margin-left:10px"><i class="fa fa-download"></i> Format Data</a>
-                                <a href="<?=base_url('dosen/import')?>" class="btn btn-sm btn-info" style="float:right; margin-left:10px"><i class="fa fa-upload"></i> Import</a>
-                                <a href="<?=base_url('dosen/tambah')?>" class="btn btn-sm btn-success"
-                                    style="float: right;"><i class="fa fa-plus"></i> Tambah</a>
+                                Tabel Staff Prodi
+                                <?php if ($profile->level=='superadmin'): ?>
+
+                                <a href="<?=base_url('staff/tambah')?>" class="btn btn-sm btn-success"
+                                    style="float: right;"><i class="fa fa-plus"></i> Tambah
+                                </a>
+                                <?php endif ?>
                             </div>
                         </div>
                         <!-- /.panel-heading -->
@@ -44,39 +46,38 @@
                                     id="dataTables-example">
                                     <thead>
                                         <tr>
-                                            <th width="50">No</th>
-                                            <th>NIDN</th>
                                             <th>Nama</th>
-                                            <th>Jenis Kelamin</th>
-                                            <th>Program Studi</th>
+                                            <th>Username</th>
+                                            <th>Email</th>
+                                            <th>Prodi</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php $x=1; ?>
                                         <?php if(isset($datas)): ?>
                                         <?php foreach($datas as $data): ?>
                                         <tr>
-                                            <td align="center"><?php echo $x++; ?></td>
-                                            <td><?php echo $data['nidn'] ?></td>
                                             <td><?php echo $data['nama']; ?></td>
-                                            <td><?php echo $data['jenis_kelamin']; ?></td>
+                                            <td><?php echo $data['username']; ?></td>
+                                            <td><?php echo $data['email']; ?></td>
                                             <td><?php echo $data['prodi']; ?></td>
-
                                             <td align="center">
-                                                <a href="<?=base_url()?>dosen/detail?nidn=<?php echo $data['nidn'] ?>"
+                                                <!-- <a href="<?=base_url()?>periode/detail?id=<?php echo $data['id'] ?>"
                                                     class="btn btn-xs btn-info" title="Lihat">
                                                     <i class="fa fa-eye"></i>
-                                                </a>
-                                                <a href="<?=base_url()?>dosen/ubah?nidn=<?php echo $data['nidn'] ?>"
+                                                </a> -->
+                                                <?php if ($profile->level=='superadmin'): ?>
+
+                                                <a href="<?=base_url()?>staff/ubah?id=<?php echo $data['id'] ?>"
                                                     class="btn btn-xs btn-warning" title="Ubah">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>
-                                                <a href="<?=base_url()?>dosen/hapus?nidn=<?php echo $data['nidn'] ?>"
+                                                <a href="<?=base_url()?>staff/hapus?id=<?php echo $data['id'] ?>"
                                                     class="btn btn-xs btn-danger" title="Hapus"
                                                     onclick="return confirm('Apakah anda yakin ingin menghapus?')">
                                                     <i class="fa fa-remove"></i>
                                                 </a>
+                                                <?php endif ?>
                                             </td>
                                         </tr>
                                         <?php endforeach; ?>

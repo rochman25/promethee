@@ -22,6 +22,7 @@
                         <h3 class="panel-title">Silahkan Login</h3>
                     </div>
                     <div class="panel-body">
+                    <?php echo $this->session->flashdata('pesan') ?>
                         <form action="" method="post">
                             <fieldset>
                                 <div class="form-group">

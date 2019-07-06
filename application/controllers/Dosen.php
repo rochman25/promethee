@@ -15,7 +15,12 @@ class Dosen extends CI_Controller
         if ($this->_isLoggedIn()) {
             $profile = $this->DataModel->getWhere('id', $this->session->userdata['admin_data']['id']);
             $profile = $this->DataModel->getData('pengguna')->row();
-            $dosen = $this->DataModel->getData('dosen')->result_array();
+            if($profile->level != "superadmin"){
+                $dosen = $this->DataModel->getWhere('prodi',$profile->prodi);
+                $dosen = $this->DataModel->getData('dosen')->result_array();
+            }else{
+                $dosen = $this->DataModel->getData('dosen')->result_array();
+            }
             $data = array(
                 "datas" => $dosen,
                 "profile" => $profile,
@@ -111,6 +116,23 @@ class Dosen extends CI_Controller
                 $this->load->view('pages/dosen/form_dosen', $data);
             }
         } else {
+            redirect('admin/login');
+        }
+    }
+
+    public function import(){
+        if($this->_isLoggedIn()){
+            $profile = $this->DataModel->getWhere('id', $this->session->userdata['admin_data']['id']);
+            $profile = $this->DataModel->getData('pengguna')->row();
+            $data = array(
+                "profile" => $profile
+            );
+            if($this->input->post('kirim')){
+
+            }else{
+                $this->load->view('pages/dosen/import_file',$data);
+            }
+        }else{
             redirect('admin/login');
         }
     }

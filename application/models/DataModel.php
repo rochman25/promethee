@@ -21,6 +21,11 @@ class DataModel extends CI_Model
         return $query;
     }
 
+    function order_by($col,$mode){
+        $query = $this->db->order_by($col,$mode);
+        return $query;
+    }
+
     function getWhereArr($array)
     {
         $query = $this->db->where($array);

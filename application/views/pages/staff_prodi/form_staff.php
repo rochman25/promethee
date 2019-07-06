@@ -32,7 +32,7 @@
                     <div class="col-lg-12">
                         <div class="panel panel-green">
                             <div class="panel-heading">
-                                Form kriteria Dosen Berprestasi
+                                Form Periode
                             </div>
                             <div class="panel-body">
                                 <form action="" method="post">
@@ -43,55 +43,58 @@
                                         <div class="col-lg-9">
                                             <input class="form-control" type="text" name="nama" placeholder="Nama"
                                                 required=""
-                                                value="<?php if(isset($data_kriteria)) echo $data_kriteria->nama; ?>">
+                                                value="<?php if(isset($data_staff)) echo $data_staff->nama; ?>">
                                                 <?=form_error('nama')?>
                                         </div>
                                     </div>
 
                                     <div class="row form-group">
                                         <div class="col-lg-3">
-                                            <label>Bobot</label>
+                                            <label>Username</label>
                                         </div>
                                         <div class="col-lg-9">
-                                            <input class="form-control" type="number" name="bobot" placeholder="Bobot"
-                                                required="" step="0.1"
-                                                value="<?php if(isset($data_kriteria)) echo $data_kriteria->bobot; ?>">
+                                            <input class="form-control" type="text" name="username" placeholder="Username"
+                                                required=""
+                                                value="<?php if(isset($data_staff)) echo $data_staff->username; ?>">
+                                                <?=form_error('username')?>
                                         </div>
                                     </div>
-                                    <div class="row form-group">
-                                        <div class="col-lg-3">
-                                            <label>Jenis</label>
-                                        </div>
-                                        <div class="col-lg-9">
-                                            <select class="form-control" name="jenis">
-                                                <option value="">- Jenis -</option>
-                                                <option value="MIN"
-                                                    <?php if(isset($data_kriteria) && $data_kriteria->jenis=='MIN') echo "selected"; ?>>
-                                                    MIN</option>
-                                                <option value="MAX"
-                                                    <?php if(isset($data_kriteria) && $data_kriteria->jenis=='MAX') echo "selected"; ?>>
-                                                    MAX</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <?php if(!empty($this->input->get('id'))){
-                                        
-                                    }else{ ?>
-                                    <div class="row form-group">
-                                        <div class="col-lg-3">
-                                            <label>SubKriteria</label>
-                                        </div>
-                                        <div class="col-lg-9">
-                                            <select class="form-control" name="subkriteria" id="add_sub">
-                                                <option value="">- Sub Kriteria -</option>
-                                                <option value="Tidak Ada">Tidak Ada</option>
-                                                <option value="Punya">Punya</option>
 
-                                            </select>
+                                    <div class="row form-group">
+                                        <div class="col-lg-3">
+                                            <label>Email</label>
+                                        </div>
+                                        <div class="col-lg-9">
+                                            <input class="form-control" type="email" name="email" placeholder="Email"
+                                                required=""
+                                                value="<?php if(isset($data_staff)) echo $data_staff->email; ?>">
+                                                <?=form_error('email')?>
                                         </div>
                                     </div>
-                                    <?php } ?>
-                                    <div id="sub"></div>
+                                    
+                                    <div class="row form-group">
+                                        <div class="col-lg-3">
+                                            <label>Prodi</label>
+                                        </div>
+                                        <div class="col-lg-9">
+                                            <select name="prodi" class="form-control" required>
+                                                <option value="">Pilih Program Studi</option>
+                                                <option value="TI" <?php if(isset($data_staff) && $data_staff->prodi == "TI") echo "selected" ?>>Teknik Informatika</option>
+                                                <option value="SI" <?php if(isset($data_staff) && $data_staff->prodi == "SI") echo "selected" ?>>Sistem Informasi</option>   
+                                            </select>
+                                            <?=form_error('prodi')?>
+                                        </div>
+                                    </div>
+
+                                    <div class="row form-group">
+                                        <div class="col-lg-3">
+                                            <label>Password</label>
+                                        </div>
+                                        <div class="col-lg-9">
+                                            <input type="password" name="password" class="form-control" required>
+                                            <?=form_error('password')?>
+                                        </div>
+                                    </div>
 
                                     <div class="form-group">
                                         <div class="col-lg-12">

@@ -13,6 +13,7 @@ class Kriteria extends CI_Controller
     public function index()
     {
         if ($this->_isLoggedIn()) {
+            $datas = null;
             $profile = $this->DataModel->getWhere('id', $this->session->userdata['admin_data']['id']);
             $profile = $this->DataModel->getData('pengguna')->row();
             $kriteria = $this->DataModel->select("kriteria.id, kriteria.nama, kriteria.bobot, kriteria.jenis, subkriteria.nama as nama_subkriteria , subkriteria.bobot as bobot_subkriteria, subkriteria.id as subkriteria_id");
@@ -140,6 +141,7 @@ class Kriteria extends CI_Controller
                 $bobot = $this->input->post('bobot');
                 $jenis = $this->input->post('jenis');
                 $sub = $this->input->post('subkriteria');
+                // die(json_encode($bobot));
                 $nama_sub = $this->input->post('sub_nama');
                 $bobot_sub = $this->input->post('sub_bobot');
                 $this->form_validation->set_rules('nama', 'Nama', 'required');

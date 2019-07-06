@@ -36,6 +36,9 @@
                     <a href="<?=base_url('admin/index')?>"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
                 <li>
+                    <a href="<?=base_url('periode')?>"><i class="fa fa-table fa-fw"></i> Data Periode</a>
+                </li>
+                <li>
                     <a href="<?=base_url('kriteria')?>"><i class="fa fa-table fa-fw"></i> Data Kriteria</a>
                 </li>
                 <li>
@@ -44,12 +47,15 @@
                 <li>
                     <a href="<?=base_url('proses')?>"><i class="fa fa-edit fa-fw"></i>Proses & Hasil Seleksi</a>
                 </li>
+                <li>
+                    <a href="<?=base_url('riwayat')?>"><i class="fa fa-history fa-fw"></i>Riwayat Seleksi</a>
+                </li>
                 <?php if ($profile->level=='superadmin'): ?>
                 <li>
                     <a href="#"><i class="fa fa-gear"></i> Pengaturan<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="index.php?url=data_pengguna">Petugas</a>
+                            <a href="<?=base_url('staff')?>">Staff Prodi</a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->

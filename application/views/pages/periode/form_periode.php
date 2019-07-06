@@ -32,7 +32,7 @@
                     <div class="col-lg-12">
                         <div class="panel panel-green">
                             <div class="panel-heading">
-                                Form kriteria Dosen Berprestasi
+                                Form Periode
                             </div>
                             <div class="panel-body">
                                 <form action="" method="post">
@@ -43,54 +43,19 @@
                                         <div class="col-lg-9">
                                             <input class="form-control" type="text" name="nama" placeholder="Nama"
                                                 required=""
-                                                value="<?php if(isset($data_kriteria)) echo $data_kriteria->nama; ?>">
+                                                value="<?php if(isset($data_periode)) echo $data_periode->nama; ?>">
                                                 <?=form_error('nama')?>
                                         </div>
                                     </div>
 
                                     <div class="row form-group">
                                         <div class="col-lg-3">
-                                            <label>Bobot</label>
+                                            <label>Keterangan (optional)</label>
                                         </div>
                                         <div class="col-lg-9">
-                                            <input class="form-control" type="number" name="bobot" placeholder="Bobot"
-                                                required="" step="0.1"
-                                                value="<?php if(isset($data_kriteria)) echo $data_kriteria->bobot; ?>">
+                                            <textarea class="form-control" name="keterangan" placeholder="Keterangan "><?php if(isset($data_periode)) echo $data_periode->keterangan; ?></textarea>
                                         </div>
                                     </div>
-                                    <div class="row form-group">
-                                        <div class="col-lg-3">
-                                            <label>Jenis</label>
-                                        </div>
-                                        <div class="col-lg-9">
-                                            <select class="form-control" name="jenis">
-                                                <option value="">- Jenis -</option>
-                                                <option value="MIN"
-                                                    <?php if(isset($data_kriteria) && $data_kriteria->jenis=='MIN') echo "selected"; ?>>
-                                                    MIN</option>
-                                                <option value="MAX"
-                                                    <?php if(isset($data_kriteria) && $data_kriteria->jenis=='MAX') echo "selected"; ?>>
-                                                    MAX</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <?php if(!empty($this->input->get('id'))){
-                                        
-                                    }else{ ?>
-                                    <div class="row form-group">
-                                        <div class="col-lg-3">
-                                            <label>SubKriteria</label>
-                                        </div>
-                                        <div class="col-lg-9">
-                                            <select class="form-control" name="subkriteria" id="add_sub">
-                                                <option value="">- Sub Kriteria -</option>
-                                                <option value="Tidak Ada">Tidak Ada</option>
-                                                <option value="Punya">Punya</option>
-
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <?php } ?>
                                     <div id="sub"></div>
 
                                     <div class="form-group">

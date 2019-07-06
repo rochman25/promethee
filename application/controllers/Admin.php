@@ -105,7 +105,7 @@ class Admin extends CI_Controller
                 } else {
                     $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-dismissable">
                                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                                        <p>Email atau password tidak dikenali</p></div>');
+                                                        <p>Username atau password tidak dikenali</p></div>');
                     $this->load->view('pages/login');
                 }
             }

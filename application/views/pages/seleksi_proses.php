@@ -19,8 +19,37 @@
         <?php $this->load->view('master/header') ?>
         <div id="page-wrapper">
             <div class="row">
+                <div class="col-lg-12" style="margin-top:30px">
+                    <form action="" method="POST">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row form-group">
+                                        <div class="col-lg-2">
+                                            <label>Periode</label>
+                                        </div>
+                                        <div class="col-lg-10">
+                                            <select class="form-control" name="periode" required>
+                                                <option value="">Pilih Periode</option>
+                                                <?php foreach($periode as $key){ ?>
+                                                    <option value="<?=$key['id']?>" <?php echo set_select('periode',$key['id']) ?> ><?=$key['nama']?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="submit" class="btn btn-success" name="kirim_periode" value="Tampilkan">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <?php if($this->input->post('kirim_periode')){ ?>
+            <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Seleksi Dosen Terbaik</h1>
+                    <h1 class="page-header">Seleksi Dosen Berprestasi</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -62,22 +91,26 @@
                                                 </td>
                                                 <td><?php echo  $value['jenis'] ?></td>
                                                 <td>
+                                                    <input type="hidden" name="id_kriteria[<?=$value['id']?>]" value="<?=$value['id']?>">
                                                     <select class=" form-control"
                                                         name="tipe[<?php echo $value['id'] ?>]">
                                                         <option value="">Tipe</option>
-                                                        <option value="2">2</option>
-                                                        <option value="4">4</option>
+                                                        <option value="1" <?php if(array_key_exists('input_parameter',$value) && $value['input_parameter'][0]['tipe'] == 1){ echo 'selected'; } ?>>1 (Biasa)</option>
+                                                        <option value="2" <?php if(array_key_exists('input_parameter',$value) && $value['input_parameter'][0]['tipe'] == 2){ echo 'selected'; } ?>>2 (Quasi)</option>
+                                                        <option value="3" <?php if(array_key_exists('input_parameter',$value) && $value['input_parameter'][0]['tipe'] == 3){ echo 'selected'; } ?>>3 (Linier)</option>
+                                                        <option value="4" <?php if(array_key_exists('input_parameter',$value) && $value['input_parameter'][0]['tipe'] == 4){ echo 'selected'; } ?>>4 (Linier quasi)</option>
+                                                        <option value="5" <?php if(array_key_exists('input_parameter',$value) && $value['input_parameter'][0]['tipe'] == 5){ echo 'selected'; } ?>>5 (level)</option>
                                                     </select>
                                                 </td>
                                                 <td>
                                                     <input class="form-control" type="number" step="0.1"
                                                         name="q[<?php echo $value['id'] ?>]" placeholder="Parameter q"
-                                                        required>
+                                                        required value="<?php if(array_key_exists('input_parameter',$value)){ echo $value['input_parameter'][0]['q']; } ?>">
                                                 </td>
                                                 <td>
                                                     <input class="form-control" type="number" step="0.1"
                                                         name="p[<?php echo $value['id'] ?>]" placeholder="Parameter p"
-                                                        required>
+                                                        required value="<?php if(array_key_exists('input_parameter',$value)){ echo $value['input_parameter'][0]['p']; } ?>">
                                                 </td>
                                             </tr>
                                             <?php endforeach ?>
@@ -85,6 +118,7 @@
                                     </table>
                                 </div>
                                 <div class="col-lg-12" align="center">
+                                    <input type="hidden" name="periode_id" value="<?=$id_periode?>">
                                     <input type="submit" class="btn btn-lg btn-info" name="kirim" value="Mulai Seleksi">
                                 </div>
                             </form>
@@ -95,6 +129,7 @@
                     <!-- /.panel -->
                 </div>
             </div>
+            <?php } ?>
 
         </div>
         <!-- /#page-wrapper -->
