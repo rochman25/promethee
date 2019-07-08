@@ -89,18 +89,27 @@ class Staff extends CI_Controller
             );
             if($this->input->post('kirim')){
                 $nama = $this->input->post('nama');
-                $ket = $this->input->post('keterangan');
+                $username = $this->input->post('username');
+                $email = $this->input->post('email');
+                $prodi = $this->input->post('prodi');
+                $pass = $this->input->post('password');
                 $this->form_validation->set_rules('nama','Nama','required');
+                $this->form_validation->set_rules('username','Username','required');
+                $this->form_validation->set_rules('email','Email','required');
+                $this->form_validation->set_rules('password','Password','required');
                 if($this->form_validation->run() == FALSE){
-                    $this->load->view('pages/periode/form_periode',$data);
+                    $this->load->view('pages/staff/form_staff',$data);
                 }else{
                     $data = array(
                         "nama" => $nama,
-                        "keterangan" => $ket
+                        "username" => $username,
+                        "email" => $email,
+                        "prodi" => $prodi,
+                        "password" => md5($pass)
                     );
                     $this->DataModel->getWhere('id',$id);
-                    $this->DataModel->update('periode',$data);
-                    redirect('periode');
+                    $this->DataModel->update('pengguna',$data);
+                    redirect('staff');
                 }
             }else{
                 $this->load->view('pages/staff_prodi/form_staff',$data);

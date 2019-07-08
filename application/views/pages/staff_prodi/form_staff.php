@@ -32,7 +32,7 @@
                     <div class="col-lg-12">
                         <div class="panel panel-green">
                             <div class="panel-heading">
-                                Form Periode
+                                Form Staff Prodi
                             </div>
                             <div class="panel-body">
                                 <form action="" method="post">

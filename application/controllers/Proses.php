@@ -232,10 +232,10 @@ class Proses extends CI_Controller
 
         switch ($tp) {
             case '1':
-                if ($f_jka < 0 | $f_jka > 0) {
-                    $f_np = 1;
-                } else {
+                if ($f_jka = 0) {
                     $f_np = 0;
+                } else {
+                    $f_np = 1;
                 }
 
                 break;
