@@ -26,6 +26,9 @@ class Riwayat extends CI_Controller
                 $rank = $this->DataModel->order_by('nilai','desc');
                 $rank = $this->DataModel->getJoin('dosen','hasil_seleksi.nidn = dosen.nidn','inner');
                 $rank = $this->DataModel->getJoin('periode','periode.id = hasil_seleksi.periode','inner');
+                if($profile->level == 'admin'){
+                    $rank = $this->DataModel->getWhere('hasil_seleksi.prodi',$profile->prodi);
+                }
                 $rank = $this->DataModel->getWhere('periode',$id);
                 $rank = $this->DataModel->getData('hasil_seleksi')->result_array();
                 $data = array(

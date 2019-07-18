@@ -177,11 +177,11 @@ class Dosen extends CI_Controller
                                 "jenis_kelamin" => $dataArray[0][3]
                                 // "nama" => 
                             );
-                            for($row = 0; $row <= 8; $row++){
-                                $datass[] = array(
+                            // for($row = 0; $row <= 8; $row++){
+                            //     $datass[] = array(
                                      
-                                );
-                            }
+                            //     );
+                            // }
                         }
 
                         die(json_encode($datas));
@@ -275,7 +275,7 @@ class Dosen extends CI_Controller
             foreach ($kriteria as $key) {
                 $datas[$key['nama']][] = $key;
             }
-
+            // die(json_encode($dosen));
             $data['nidn'] = $dosen[0]['nidn'];
             $data['nama'] = $dosen[0]['nama'];
             $data['jenis_kelamin'] = $dosen[0]['jenis_kelamin'];

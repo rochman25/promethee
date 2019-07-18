@@ -31,12 +31,12 @@
                         <div class="panel-heading" style="padding-bottom: 20px">
                             <div>
                                 Tabel Periode
-                                <?php if ($profile->level=='superadmin'): ?>
+                                <?php //if ($profile->level=='superadmin'): ?>
 
                                 <a href="<?=base_url('periode/tambah')?>" class="btn btn-sm btn-success"
                                     style="float: right;"><i class="fa fa-plus"></i> Tambah
                                 </a>
-                                <?php endif ?>
+                                <?php //endif ?>
                             </div>
                         </div>
                         <!-- /.panel-heading -->
@@ -62,7 +62,7 @@
                                                     class="btn btn-xs btn-info" title="Lihat">
                                                     <i class="fa fa-eye"></i>
                                                 </a> -->
-                                                <?php if ($profile->level=='superadmin'): ?>
+                                                <?php //if ($profile->level=='superadmin'): ?>
 
                                                 <a href="<?=base_url()?>periode/ubah?id=<?php echo $data['id'] ?>"
                                                     class="btn btn-xs btn-warning" title="Ubah">
@@ -73,7 +73,7 @@
                                                     onclick="return confirm('Apakah anda yakin ingin menghapus?')">
                                                     <i class="fa fa-remove"></i>
                                                 </a>
-                                                <?php endif ?>
+                                                <?php //endif ?>
                                             </td>
                                         </tr>
                                         <?php endforeach; ?>

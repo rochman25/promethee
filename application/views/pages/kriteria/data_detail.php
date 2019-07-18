@@ -41,11 +41,11 @@
                                         <td>:</td>
                                         <td><?php echo $data_kriteria[0]['nama']; ?></td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td>Bobot</td>
                                         <td>:</td>
-                                        <td><?php echo $data_kriteria[0]['bobot']; ?></td>
-                                    </tr>
+                                        <td><?php //echo $data_kriteria[0]['bobot']; ?></td>
+                                    </tr> -->
                                     <tr>
                                         <td>Jenis</td>
                                         <td>:</td>

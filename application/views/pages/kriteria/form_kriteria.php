@@ -48,16 +48,17 @@
                                         </div>
                                     </div>
 
-                                    <div class="row form-group">
+                                    <!-- <div class="row form-group">
                                         <div class="col-lg-3">
                                             <label>Bobot</label>
                                         </div>
                                         <div class="col-lg-9">
                                             <input class="form-control" type="number" name="bobot" placeholder="Bobot"
-                                                required="" step="0.1"
-                                                value="<?php if(isset($data_kriteria)) echo $data_kriteria->bobot; ?>">
+                                                required="" step="0.001"
+                                                value="<?php //if(isset($data_kriteria)) echo $data_kriteria->bobot; ?>">
                                         </div>
-                                    </div>
+                                    </div> -->
+                                    
                                     <div class="row form-group">
                                         <div class="col-lg-3">
                                             <label>Jenis</label>

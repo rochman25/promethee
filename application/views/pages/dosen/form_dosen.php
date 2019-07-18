@@ -100,7 +100,7 @@
                                             <?php endif ?>
 
                                             <?php if ($data[0]['nama_subkriteria']=='input'): ?>
-                                            <input class="form-control" type="number"
+                                            <input class="form-control" type="number" max=4 min=0
                                                 name="value[<?php echo $data[0]['id']; ?>]"
                                                 placeholder="<?php echo $data[0]['nama']; ?>"
                                                 value="<?php if(isset($data_calon['kriteria'][$data[0]['nama']]['value'])) echo $data_calon['kriteria'][$data[0]['nama']]['value']; ?>">

@@ -29,13 +29,13 @@ class Proses extends CI_Controller
                 // echo $datas['data'][$val['nama']]['id'];
                 $sub = $this->DataModel->getWhere('id_kriteria', $datas['data'][$val['nama']]['id']);
                 $sub = $this->DataModel->getData('subkriteria')->result_array();
-                $input_paramter = $this->DataModel->getWhere('periode',$this->input->post('periode'));
-                $input_paramter = $this->DataModel->getWhere('id_kriteria',$datas['data'][$val['nama']]['id']);
+                $input_paramter = $this->DataModel->getWhere('periode', $this->input->post('periode'));
+                $input_paramter = $this->DataModel->getWhere('id_kriteria', $datas['data'][$val['nama']]['id']);
                 $input_parameter = $this->DataModel->getData('input_parameter')->result_array();
                 foreach ($sub as $key => $value) {
                     $datas['data'][$val['nama']]['subkriteria'][] = $value;
                 }
-                foreach ($input_parameter as $key => $value2){
+                foreach ($input_parameter as $key => $value2) {
                     $datas['data'][$val['nama']]['input_parameter'][] = $value2;
                 }
                 $bobot[] = $datas['data'][$val['nama']]['bobot'];
@@ -64,7 +64,11 @@ class Proses extends CI_Controller
             $profile = $this->DataModel->getData('pengguna')->row();
             $kriteria = $this->DataModel->distinct('*');
             $kriteria = $this->DataModel->getData('kriteria')->result_array();
+            // $dosen = $this->DataModel->select('dosen.nidn,dosen.nama,dosen.prodi,dosen.jenis_kelamin');
             $dosen = $this->DataModel->distinct('*');
+            if ($profile->level == 'admin') {
+                $dosen = $this->DataModel->getWhere('prodi', $profile->prodi);
+            }
             $dosen = $this->DataModel->getJoin('dosen_subkriteria', 'dosen.nidn = dosen_subkriteria.nidn', 'inner');
             $dosen = $this->DataModel->getData('dosen')->result_array();
             foreach ($kriteria as $key => $val) {
@@ -95,7 +99,6 @@ class Proses extends CI_Controller
                 foreach ($dos as $key => $value) {
                     $datas['data'][$val['nidn']]['kriteria'][$value['nama']] = $value;
                 }
-
             }
             $data_calon = $datas;
             unset($datas);
@@ -112,8 +115,9 @@ class Proses extends CI_Controller
             $ranking_hasil = [];
             $ranking_input = [];
             $input_parameter = [];
-
-            foreach($q as $key => $val){
+            $nidn_dosen = [];
+            // var_dump($q);
+            foreach ($q as $key => $val) {
                 // echo $key;
                 $input_parameter[] = array(
                     "id_kriteria" => $id_kriteria[$key],
@@ -123,86 +127,165 @@ class Proses extends CI_Controller
                     "periode" => $this->input->post('periode_id')
                 );
             }
-            $this->DataModel->insert_multiple('input_parameter',$input_parameter);
+            $cek = $this->DataModel->getWhere('periode', $this->input->post('periode_id'));
+            $cek = $this->DataModel->getData('input_parameter')->result_array();
+            if (!empty($cek)) {
+                $i = 0;
+                foreach ($cek as $key) {
+                    // echo $key['id'];
+                    $input_parameter[$i]['id'] = $key['id'];
+                    // array_push($key,$input_parameter);
+                    $i++;
+                }
+                // die(json_encode($input_parameter));
+                // die(json_encode($input_parameter));
+                $this->DataModel->update_multiple('input_parameter', $input_parameter, 'id');
+            } else {
+                // die(json_encode($this->input->post('periode_id')));
+                $this->DataModel->insert_multiple('input_parameter', $input_parameter);
+            }
             // die(json_encode($input_parameter));
-
+            // die(json_encode($data_calon));
             foreach ($data_kriteria['data'] as $key_kriteria => $value_kriteria) {
-
-                $bobot = $value_kriteria['bobot'] / $data_kriteria['ekstra']['total_bobot'];
+                // echo $key_kriteria;
+                // $bobot = $value_kriteria['bobot'] / $data_kriteria['ekstra']['total_bobot'];
+                // $bobot = $value_kriteria['bobot'];
+                $bobot = 0;
+                // echo $bobot ."<br>";
                 // var_dump($value_kriteria);
                 // die(json_encode($bobot));
                 $y = 1;
+
                 // Jarak Kriteria
                 // die(json_encode($data_calon));
                 foreach ($data_calon['data'] as $key_dosen_y => $value_dosen_y) {
+                    // echo $key_dosen_y . "<br>";
                     $tmp_bobot_y = $value_dosen_y['kriteria'][$key_kriteria]['nama_subkriteria'] == 'input' ? $value_dosen_y['kriteria'][$key_kriteria]['value'] : $value_dosen_y['kriteria'][$key_kriteria]['bobot_subkriteria'];
                     // die(json_encode($value_dosen_y));
                     // var_dump($value_dosen_y);
+                    // echo $tmp_bobot_y . "<br>";
                     foreach ($data_calon['data'] as $key_dosen_x => $value_dosen_x) {
-                        // die(json_encode($value_dosen_x));
                         $tmp_bobot_x = $value_dosen_x['kriteria'][$key_kriteria]['nama_subkriteria'] == 'input' ? $value_dosen_x['kriteria'][$key_kriteria]['value'] : $value_dosen_x['kriteria'][$key_kriteria]['bobot_subkriteria'];
-                        // echo json_encode($tmp_bobot_x);
+                        $jka = 0;
                         $jka = $tmp_bobot_x - $tmp_bobot_y;
-                        // var_dump($tmp_bobot_x);
-                        // var_dump($tmp_bobot_y);
-                        // var_dump($jka);
-                        $jarak_kriteria[$key_kriteria]['A' . $y][] = $jka;
-
+                        // echo $jka . "<br>";
+                        // $jarak_kriteria[$key_kriteria]['A' . $y][] = $jka;
+                        // $jarak_kriteria[$key_kriteria]['A' . $y]['a'][] = $tmp_bobot_x;
+                        // $jarak_kriteria[$key_kriteria]['A' . $y]['b'][] = $tmp_bobot_y;
+                        // $jarak_kriteria[$key_kriteria]['A' . $y]['D'][] = abs($jka);
+                        // echo $tipe[$value_kriteria['id']] . "<br>";
                         $nilai_pref = $this->_NilaiPreferensi($tipe[$value_kriteria['id']], $jka, $q[$value_kriteria['id']], $p[$value_kriteria['id']], $bobot);
-                        // var_dump($nilai_pref);
-                        $h_d[$key_kriteria]['A' . $y][] = $nilai_pref;
+                        // echo "tipe = " . $tipe[$value_kriteria['id']] . " " . $key_kriteria . " : " . $key_dosen_x . "-" . $key_dosen_y . " = " . $tmp_bobot_x . "-" . $tmp_bobot_y . " = " . $jka . " q = " . $q[$value_kriteria['id']] . " p = "  . $p[$value_kriteria['id']] . " p = " . $nilai_pref . "<br>";
+                        // echo "tipe = " . $tipe[$value_kriteria['id']] . " " . $tmp_bobot_x . "-" . $tmp_bobot_y . " = " . $jka . " q = " . $q[$value_kriteria['id']] . " p = "  . $p[$value_kriteria['id']] . " p = " . $nilai_pref . "<br>";
+                        // echo $nilai_pref . "<br>";
+                        // $index_pref[$key_dosen_x][$key_dosen_y] = $nilai_pref;
+                        // $jarak_kriteria[$key_kriteria][$key_dosen_y]['p'][] = $nilai_pref;
+                        $h_d[$key_kriteria][$key_dosen_y][] = $nilai_pref;
+                        // if ($key_dosen_x != $key_dosen_y) {
+                            $jarak_kriteria[$key_kriteria][$key_dosen_x]['a'][] = $tmp_bobot_x;
+                            $jarak_kriteria[$key_kriteria][$key_dosen_x]['b'][] = $tmp_bobot_y;
+                            $jarak_kriteria[$key_kriteria][$key_dosen_x]['d'][] = $jka;
+                            $jarak_kriteria[$key_kriteria][$key_dosen_x]['D'][] = abs($jka);
+                            $jarak_kriteria[$key_kriteria][$key_dosen_x]['p'][] = $nilai_pref;
+                        // }
+                        // }
+                        // die(json_encode($value_dosen_x));
+                        // echo json_encode($value_dosen_x,true);
+                        // die(json_encode($tmp_bobot_x));
+                        // echo $key_dosen_x . "<br>";
+                        // echo $tmp_bobot_y . "<br>";
+                        // echo $tmp_bobot_x . "-" . $tmp_bobot_y . "<br>";
+
+                        // echo $jka . "<br>";
                         // die(json_encode($h_d));
                     }
+                    // echo $y;
                     $y++;
                 }
-
+                // die(json_encode($tmp_bobot_x));
+                // die();
             }
+            // die(json_encode($h_d));
             // die();
             // die(json_encode($jarak_kriteria));
-            // die(json_encode($h_d));
-            for ($i = 0; $i < count($data_calon['data']); $i++) {
-
+            // die(json_encode($data_calon));
+            // for ($i = 0; $i < count($data_calon['data']); $i++) {
+            foreach ($data_calon['data'] as $key_dosen => $val) {
                 for ($j = 0; $j < count($data_calon['data']); $j++) {
-
+                    // if($i != $j){
                     $tmp_sum = 0;
                     foreach ($data_kriteria['data'] as $key => $value) {
-
-                        $tmp_sum += $h_d[$key]['A' . ($i + 1)][$j];
-
+                        // var_dump($h_d);
+                        // echo $h_d[$key]['A' . ($i + 1)][$j] . "<br>";
+                        $tmp_sum += (1 / count($data_kriteria['data'])) * $h_d[$key][$key_dosen][$j];
+                        // var_dump($h_d[$key]);
+                        // echo $tmp_sum . "<br>";
+                        // echo $h_d[$key]['A' . ($i + 1)][$j] . "<br>";
                     }
-                    $ranking['A' . ($i + 1)][$j] = $tmp_sum;
+                    $ranking[$key_dosen][$j] = $tmp_sum;
+                    // }
                 }
-                $hasil['A' . ($i + 1)]['leaving'] = array_sum($ranking['A' . ($i + 1)]) / (count($data_calon['data']) - 1);
+                // echo array_sum($ranking[$key_dosen]) . "<br>";
+                $hasil[$key_dosen]['entering'] = (1 / 4) * array_sum($ranking[$key_dosen]);
             }
+            // die(json_encode($ranking));
+            // die();
             $j = 0;
-            foreach ($data_calon['data'] as $key => $value) {
+            foreach ($data_calon['data'] as $key_d => $val) {
                 $tmp_entering = 0;
-                for ($i = 0; $i < count($data_calon['data']); $i++) {
-                    $tmp_entering += $ranking['A' . ($i + 1)][$j];
+                foreach ($data_calon['data'] as $key => $value) {
+                    $tmp_entering += $ranking[$key][$j];
+                    // echo $j;
+                    // echo $ranking[$key][$i] . "<br>";
+                    // die(json_encode($ranking[$key][$i]));
+                    // echo $ranking[$key] . "<br>";
+                    // echo $tmp_entering . "<br>";
+                    // echo $ranking[$key][$i] . "<br>";
                 }
-                $hasil['A' . ($j + 1)]['entering'] = $tmp_entering / (count($data_calon['data']) - 1);
-                $hasil['A' . ($j + 1)]['net_flow'] = $hasil['A' . ($j + 1)]['leaving'] - $hasil['A' . ($j + 1)]['entering'];
-                $hasil['A' . ($j + 1)]['nama'] = $value['nama'];
+
+                // echo $tmp_entering . "<br>";
+                $hasil[$key_d]['leaving'] = (1 / 4) * $tmp_entering;
+                $hasil[$key_d]['net_flow'] = $hasil[$key_d]['leaving'] - $hasil[$key_d]['entering'];
+                $hasil[$key_d]['nama'] = $val['nama'];
                 $ranking_hasil[] = array(
-                    "nidn" => $value['nidn'],
-                    "nama" => $value['nama'],
-                    "nilai" =>  $hasil['A' . ($j + 1)]['leaving'] - $hasil['A' . ($j + 1)]['entering']
+                    "nidn" => $val['nidn'],
+                    "nama" => $val['nama'],
+                    "nilai" =>  $hasil[$key_d]['leaving'] - $hasil[$key_d]['entering']
                 );
                 $ranking_input[] = array(
-                    "nidn" => $value['nidn'],
-                    "nilai" => $hasil['A' . ($j + 1)]['leaving'] - $hasil['A' . ($j + 1)]['entering'],
-                    "periode" => $this->input->post('periode_id')
+                    "nidn" => $val['nidn'],
+                    "nilai" => $hasil[$key_d]['leaving'] - $hasil[$key_d]['entering'],
+                    "periode" => $this->input->post('periode_id'),
+                    'prodi' => $profile->prodi
                 );
                 $j++;
             }
+            // die();
+            // die(json_encode($hasil));
             // $rank = array();
-            $nilai = array_column($ranking_hasil,'nilai');
-            array_multisort($nilai,SORT_DESC,$ranking_hasil);
+            $nilai = array_column($ranking_hasil, 'nilai');
+            array_multisort($nilai, SORT_DESC, $ranking_hasil);
             // die(json_encode($rank));
             // array_multisort()
-            // die(json_encode($ranking_hasil));
+
             // ksort($ranking_hasil);
-            $this->DataModel->insert_multiple("hasil_seleksi",$ranking_input);
+            $cek = $this->DataModel->getWhere('prodi', $profile->prodi);
+            $cek = $this->DataModel->getWhere('periode', $this->input->post('periode_id'));
+            $cek = $this->DataModel->getData('hasil_seleksi')->result_array();
+            if (!empty($cek)) {
+                $i = 0;
+                foreach ($cek as $key) {
+                    $ranking_input[$i]['id'] = $key['id'];
+                    $i++;
+                }
+                // die(json_encode($ranking_input));
+                $this->DataModel->update_multiple('hasil_seleksi', $ranking_input, 'id');
+            } else {
+                $this->DataModel->insert_multiple("hasil_seleksi", $ranking_input);
+            }
+
+
+
             $data = array(
                 "data_kriteria" => $data_kriteria,
                 "data_calon" => $data_calon,
@@ -226,36 +309,44 @@ class Proses extends CI_Controller
         }
     }
 
-    private function _NilaiPreferensi($tp = '', $f_jka, $f_q, $f_p = '', $f_bobot)
+    private function _NilaiPreferensi($tp, $f_jka, $f_q, $f_p, $f_bobot)
     {
         $f_np = 0;
 
         switch ($tp) {
-            case '1':
-                if ($f_jka = 0) {
+            case 1:
+                if ($f_jka == 0) {
                     $f_np = 0;
                 } else {
                     $f_np = 1;
                 }
-
                 break;
-            case '2':
-                if ($f_jka < -$f_q | $f_jka > $f_q) {
-                    $f_np = 1;
-                } else {
+            case 2:
+                if ($f_jka <= $f_q) {
                     $f_np = 0;
+                } else {
+                    $f_np = 1;
                 }
-
+                // die(json_encode($f_np));
                 break;
-            case '3':
+            case 3:
                 if ($f_jka < -$f_p | $f_jka > $f_p) {
                     $f_np = 1;
                 } else {
                     $f_np = $f_jka / $f_p;
                 }
                 break;
+            case 4:
+                if ($f_p < abs($f_jka)) {
+                    $f_np = 1;
+                } else if (abs($f_jka) <= $f_q) {
+                    $f_np = 0;
+                } else {
+                    $f_np = 0.5;
+                }
+                break;
 
-            case '4':
+            case 5:
                 if ($f_jka > $f_q) {
                     $f_np = 1;
                 } else if ($f_jka <= $f_q) {
@@ -265,21 +356,11 @@ class Proses extends CI_Controller
                     $f_np = $f_jka / $per;
                 }
                 break;
-            case '5':
-                if ($f_jka > $f_p) {
-                    $f_np = 1;
-                } else if ($f_jka <= $f_q) {
+
+            case 6:
+                if ($f_jka <= 0) {
                     $f_np = 0;
                 } else {
-                    $f_np = 0.5;
-                }
-
-                break;
-
-            case '6':
-                if($f_jka <= 0){
-                    $f_np = 0;
-                }else{
                     // $f_np = 
                 }
                 break;
@@ -289,9 +370,9 @@ class Proses extends CI_Controller
                 break;
         }
 
-        $hasil = $f_np * $f_bobot;
+        //$hasil = $f_np*$f_bobot;
 
-        return $hasil;
+        return $f_np;
     }
 
     private function _isLoggedIn()
@@ -302,5 +383,4 @@ class Proses extends CI_Controller
             return false;
         }
     }
-
 }

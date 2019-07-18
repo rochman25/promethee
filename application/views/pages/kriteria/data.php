@@ -31,12 +31,12 @@
                         <div class="panel-heading" style="padding-bottom: 20px">
                             <div>
                                 Tabel kriteria Penialain Dosen
-                                <?php if ($profile->level=='superadmin'): ?>
+                                <?php //if ($profile->level=='superadmin'): ?>
 
                                 <a href="<?=base_url('kriteria/tambah')?>" class="btn btn-sm btn-success"
                                     style="float: right;"><i class="fa fa-plus"></i> Tambah
                                 </a>
-                                <?php endif ?>
+                                <?php //endif ?>
                             </div>
                         </div>
                         <!-- /.panel-heading -->
@@ -47,7 +47,7 @@
                                     <thead>
                                         <tr>
                                             <th>Nama</th>
-                                            <th>Bobot</th>
+                                            <!-- <th>Bobot</th> -->
                                             <th>Jenis</th>
                                             <th>SubKriteria (Bobot)</th>
                                             <th>Aksi</th>
@@ -58,7 +58,7 @@
                                         <?php foreach($datas as $data): ?>
                                         <tr>
                                             <td><?php echo $data[0]['nama']; ?></td>
-                                            <td><?php echo $data[0]['bobot']; ?></td>
+                                            <!-- <td><?php //echo $data[0]['bobot']; ?></td> -->
                                             <td><?php echo $data[0]['jenis']; ?></td>
                                             <td>
                                                 <?php foreach($data as $data_sub){ ?>
@@ -76,7 +76,7 @@
                                                     class="btn btn-xs btn-info" title="Lihat">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                                <?php if ($profile->level=='superadmin'): ?>
+                                                <?php //if ($profile->level=='superadmin'): ?>
 
                                                 <a href="<?=base_url()?>kriteria/ubah/?id=<?php echo $data[0]['id'] ?>"
                                                     class="btn btn-xs btn-warning" title="Ubah">
@@ -87,7 +87,7 @@
                                                     onclick="return confirm('Apakah anda yakin ingin menghapus?')">
                                                     <i class="fa fa-remove"></i>
                                                 </a>
-                                                <?php endif ?>
+                                                <?php //endif ?>
                                             </td>
                                         </tr>
                                         <?php endforeach; ?>

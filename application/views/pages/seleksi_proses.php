@@ -71,7 +71,7 @@
                                             <tr>
                                                 <th rowspan="2" style="vertical-align: middle;">No</th>
                                                 <th rowspan="2" style="vertical-align: middle;">Kriteria</th>
-                                                <th rowspan="2" style="vertical-align: middle;">Bobot</th>
+                                                <!-- <th rowspan="2" style="vertical-align: middle;">Bobot</th> -->
                                                 <th rowspan="2" style="vertical-align: middle;">Jenis</th>
                                                 <th width="100" rowspan="2" style="vertical-align: middle;">Tipe</th>
                                                 <th colspan="2" style="text-align: center">Parameter</th>
@@ -87,7 +87,8 @@
                                             <tr>
                                                 <td><?php echo $x++ ?></td>
                                                 <td><?php echo $key ?></td>
-                                                <td><?php echo $value['bobot']/$data_kriteria['ekstra']['total_bobot'];?>
+                                                <!-- <td><?php //echo $value['bobot'] ?></td> -->
+                                                <!-- <td><?php echo $value['bobot']/$data_kriteria['ekstra']['total_bobot'];?> -->
                                                 </td>
                                                 <td><?php echo  $value['jenis'] ?></td>
                                                 <td>
@@ -97,9 +98,7 @@
                                                         <option value="">Tipe</option>
                                                         <option value="1" <?php if(array_key_exists('input_parameter',$value) && $value['input_parameter'][0]['tipe'] == 1){ echo 'selected'; } ?>>1 (Biasa)</option>
                                                         <option value="2" <?php if(array_key_exists('input_parameter',$value) && $value['input_parameter'][0]['tipe'] == 2){ echo 'selected'; } ?>>2 (Quasi)</option>
-                                                        <option value="3" <?php if(array_key_exists('input_parameter',$value) && $value['input_parameter'][0]['tipe'] == 3){ echo 'selected'; } ?>>3 (Linier)</option>
-                                                        <option value="4" <?php if(array_key_exists('input_parameter',$value) && $value['input_parameter'][0]['tipe'] == 4){ echo 'selected'; } ?>>4 (Linier quasi)</option>
-                                                        <option value="5" <?php if(array_key_exists('input_parameter',$value) && $value['input_parameter'][0]['tipe'] == 5){ echo 'selected'; } ?>>5 (level)</option>
+                                                        <option value="4" <?php if(array_key_exists('input_parameter',$value) && $value['input_parameter'][0]['tipe'] == 4){ echo 'selected'; } ?>>4 (level)</option>
                                                     </select>
                                                 </td>
                                                 <td>
