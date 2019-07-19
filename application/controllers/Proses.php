@@ -13,17 +13,20 @@ class Proses extends CI_Controller
     public function index()
     {
         if ($this->_isLoggedIn()) {
-            $id_periode = $this->input->post('periode');
+            $id_periode = $this->input->get('periode');
             $profile = $this->DataModel->getWhere('id', $this->session->userdata['admin_data']['id']);
             $profile = $this->DataModel->getData('pengguna')->row();
             $periode = $this->DataModel->getData('periode')->result_array();
             $kriteria = $this->DataModel->distinct('*');
             $kriteria = $this->DataModel->getData('kriteria')->result_array();
-            $dosen = $this->DataModel->select('dosen.*, kriteria.nama as nama_kriteria, subkriteria.nama as nama_subkriteria, dosen_subkriteria.value as value_dosen_subkriteria, dosen_subkriteria.id as dosen_subkriteria_id');
-            $dosen = $this->DataModel->getJoin('dosen_subkriteria', 'dosen.nidn = dosen_subkriteria.nidn', 'inner');
-            $dosen = $this->DataModel->getJoin('subkriteria', 'dosen_subkriteria.id_subkriteria = subkriteria.id', 'inner');
-            $dosen = $this->DataModel->getjOin('kriteria', 'subkriteria.id_kriteria=kriteria.id', 'inner');
-            $dosen = $this->DataModel->getData('dosen')->result_array();
+            $dosen = array();
+            if ($this->input->get('periode') != null) {
+                $dosen = $this->DataModel->distinct('dosen.nidn,dosen.nama,dosen.prodi,dosen.jenis_kelamin');
+                $dosen = $this->DataModel->order_by('dosen.nama', 'ASC');
+                $dosen = $this->DataModel->getJoin('dosen_subkriteria', 'dosen_subkriteria.nidn = dosen.nidn', 'inner');
+                $dosen = $this->DataModel->getWhere('dosen_subkriteria.periode', $id_periode);
+                $dosen = $this->DataModel->getData('dosen')->result_array();
+            }
             foreach ($kriteria as $key => $val) {
                 $datas['data'][$val['nama']] = $val;
                 // echo $datas['data'][$val['nama']]['id'];
@@ -45,12 +48,14 @@ class Proses extends CI_Controller
             $datas['ekstra']['total_bobot'] = array_sum($bobot);
             // die(json_encode($datas));
             $data = array(
+                "dosen" => $dosen,
                 "data_kriteria" => $datas,
                 "kriteria" => $kriteria,
                 "profile" => $profile,
                 "periode" => $periode,
                 "id_periode" => $id_periode
             );
+            // die(json_encode($data));
             $this->load->view('pages/seleksi_proses', $data);
         } else {
             redirect('admin/login');
@@ -60,6 +65,7 @@ class Proses extends CI_Controller
     public function seleksi()
     {
         if ($this->_isLoggedIn()) {
+            $id_periode = $this->input->post('periode_id');
             $profile = $this->DataModel->getWhere('id', $this->session->userdata['admin_data']['id']);
             $profile = $this->DataModel->getData('pengguna')->row();
             $kriteria = $this->DataModel->distinct('*');
@@ -69,7 +75,9 @@ class Proses extends CI_Controller
             if ($profile->level == 'admin') {
                 $dosen = $this->DataModel->getWhere('prodi', $profile->prodi);
             }
+            $dosen = $this->DataModel->order_by('dosen.nama', 'ASC');
             $dosen = $this->DataModel->getJoin('dosen_subkriteria', 'dosen.nidn = dosen_subkriteria.nidn', 'inner');
+            $dosen = $this->DataModel->getWhere('dosen_subkriteria.periode', $id_periode);
             $dosen = $this->DataModel->getData('dosen')->result_array();
             foreach ($kriteria as $key => $val) {
                 $datas['data'][$val['nama']] = $val;
@@ -175,18 +183,18 @@ class Proses extends CI_Controller
                         // $jarak_kriteria[$key_kriteria]['A' . $y]['D'][] = abs($jka);
                         // echo $tipe[$value_kriteria['id']] . "<br>";
                         $nilai_pref = $this->_NilaiPreferensi($tipe[$value_kriteria['id']], $jka, $q[$value_kriteria['id']], $p[$value_kriteria['id']], $bobot);
-                        // echo "tipe = " . $tipe[$value_kriteria['id']] . " " . $key_kriteria . " : " . $key_dosen_x . "-" . $key_dosen_y . " = " . $tmp_bobot_x . "-" . $tmp_bobot_y . " = " . $jka . " q = " . $q[$value_kriteria['id']] . " p = "  . $p[$value_kriteria['id']] . " p = " . $nilai_pref . "<br>";
                         // echo "tipe = " . $tipe[$value_kriteria['id']] . " " . $tmp_bobot_x . "-" . $tmp_bobot_y . " = " . $jka . " q = " . $q[$value_kriteria['id']] . " p = "  . $p[$value_kriteria['id']] . " p = " . $nilai_pref . "<br>";
                         // echo $nilai_pref . "<br>";
                         // $index_pref[$key_dosen_x][$key_dosen_y] = $nilai_pref;
                         // $jarak_kriteria[$key_kriteria][$key_dosen_y]['p'][] = $nilai_pref;
                         $h_d[$key_kriteria][$key_dosen_y][] = $nilai_pref;
                         // if ($key_dosen_x != $key_dosen_y) {
-                            $jarak_kriteria[$key_kriteria][$key_dosen_x]['a'][] = $tmp_bobot_x;
-                            $jarak_kriteria[$key_kriteria][$key_dosen_x]['b'][] = $tmp_bobot_y;
-                            $jarak_kriteria[$key_kriteria][$key_dosen_x]['d'][] = $jka;
-                            $jarak_kriteria[$key_kriteria][$key_dosen_x]['D'][] = abs($jka);
-                            $jarak_kriteria[$key_kriteria][$key_dosen_x]['p'][] = $nilai_pref;
+                        // echo "tipe = " . $tipe[$value_kriteria['id']] . " " . $key_kriteria . " : " . $key_dosen_x . "-" . $key_dosen_y . " = " . $tmp_bobot_x . "-" . $tmp_bobot_y . " = " . $jka . " q = " . $q[$value_kriteria['id']] . " p = "  . $p[$value_kriteria['id']] . " p = " . $nilai_pref . "<br>";
+                        $jarak_kriteria[$key_kriteria][$key_dosen_x]['a'][] = $tmp_bobot_x;
+                        $jarak_kriteria[$key_kriteria][$key_dosen_x]['b'][] = $tmp_bobot_y;
+                        $jarak_kriteria[$key_kriteria][$key_dosen_x]['d'][] = $jka;
+                        $jarak_kriteria[$key_kriteria][$key_dosen_x]['D'][] = abs($jka);
+                        $jarak_kriteria[$key_kriteria][$key_dosen_x]['p'][] = $nilai_pref;
                         // }
                         // }
                         // die(json_encode($value_dosen_x));
@@ -279,7 +287,36 @@ class Proses extends CI_Controller
                     $i++;
                 }
                 // die(json_encode($ranking_input));
-                $this->DataModel->update_multiple('hasil_seleksi', $ranking_input, 'id');
+                foreach ($ranking_input as $key) {
+                    if(isset($key['id'])){
+                        $dat_in = array(
+                            "nilai" => $key['nilai'],
+                            "nidn" => $key['nidn'],
+                            "prodi" => $key['prodi'],
+                            "periode" => $key['periode']
+                        );
+                        $this->DataModel->getWhere('id',$key['id']);
+                        $this->DataModel->update('hasil_seleksi',$dat_in);
+                    }
+                    // $ceek = $this->DataModel->getWhere('id',$key['id']);
+                    // $ceek = $this->DataModel->getData('hasil_seleksi')->row();
+                    // if($ceek != null){
+                        
+                    // }
+                    else{
+                        $dat_in = array(
+                            "nilai" => $key['nilai'],
+                            "nidn" => $key['nidn'],
+                            "prodi" => $key['prodi'],
+                            "periode" => $key['periode']
+                        );
+                        $this->DataModel->insert('hasil_seleksi',$dat_in);
+                    }
+                    unset($dat_in);
+                    // echo $key['id'] . "<br>";
+                }
+                // die();
+                // $this->DataModel->update_multiple('hasil_seleksi', $ranking_input, 'id');
             } else {
                 $this->DataModel->insert_multiple("hasil_seleksi", $ranking_input);
             }
@@ -337,7 +374,7 @@ class Proses extends CI_Controller
                 }
                 break;
             case 4:
-                if ($f_p < abs($f_jka)) {
+                if (abs($f_jka) > $f_p) {
                     $f_np = 1;
                 } else if (abs($f_jka) <= $f_q) {
                     $f_np = 0;

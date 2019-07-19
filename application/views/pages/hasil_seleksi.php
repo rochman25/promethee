@@ -224,7 +224,7 @@
                                                         <tr>
                                                             <?php if($key != $key_a){ ?>
                                                             <td><?php echo $key['nidn'] ?></td>
-                                                            <td><?php echo $key_a['nidn'] ?></td>
+                                                            <td><?php echo $key_a['nidn']?></td>
                                                             <td><?php echo $value['a'][$a] ?></td>
                                                             <td><?php echo $value['b'][$a] ?></td>
                                                             <td><?php echo $value['d'][$a] ?></td>

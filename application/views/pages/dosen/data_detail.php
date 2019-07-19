@@ -51,6 +51,11 @@
                                         <td>:</td>
                                         <td><?php echo $data_calon['prodi']; ?></td>
                                     </tr>
+                                    <tr>
+                                        <td>Periode</td>
+                                        <td>:</td>
+                                        <td><?php echo $data_calon['periode'];?></td>
+                                    </tr>
                                     <?php foreach ($data_calon['kriteria'] as $key => $value): ?>
                                     <tr>
                                         <td><?php echo $key; ?></td>
@@ -58,7 +63,6 @@
                                         <td><?php echo $value['value'] ?></td>
                                     </tr>
                                     <?php endforeach ?>
-
                                 </table>
                             </div>
                         </div>

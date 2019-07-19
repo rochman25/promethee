@@ -206,10 +206,10 @@ class Kriteria extends CI_Controller
                 $bobot = $this->input->post('bobot');
                 $jenis = $this->input->post('jenis');
                 $this->form_validation->set_rules('nama', 'Nama', 'required');
-                $this->form_validation->set_rules('bobot', 'Bobot', 'required');
+                // $this->form_validation->set_rules('bobot', 'Bobot', 'required');
                 $this->form_validation->set_rules('jenis', 'Jenis', 'required');
                 if ($this->form_validation->run() == false) {
-                    $this->load->view('pages/tambah_kriteria', $data);
+                    $this->load->view('pages/kriteria/form_kriteria', $data);
                 } else {
                     $dataK = array(
                         "nama" => $nama,
