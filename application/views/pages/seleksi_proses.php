@@ -117,12 +117,14 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <?php if(count($dosen) > 1){ ?>
                                 <div class="col">
                                     <form action="" method="POST">
                                         <input type="hidden" name="periode" value="<?=$id_periode?>">
                                         <center><input type="submit" name="proses" class="btn btn-lg btn-primary" value="Proses"></center>
                                     </form>
                                 </div>
+                                <?php } ?>
                                 <?php endif; ?>
                                 <!-- /.table-responsive -->
 

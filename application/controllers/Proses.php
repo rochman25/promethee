@@ -23,6 +23,9 @@ class Proses extends CI_Controller
             if ($this->input->get('periode') != null) {
                 $dosen = $this->DataModel->distinct('dosen.nidn,dosen.nama,dosen.prodi,dosen.jenis_kelamin');
                 $dosen = $this->DataModel->order_by('dosen.nama', 'ASC');
+                if($profile->level == "admin"){
+                    $dosen = $this->DataModel->getWhere('dosen.prodi',$profile->prodi);
+                }
                 $dosen = $this->DataModel->getJoin('dosen_subkriteria', 'dosen_subkriteria.nidn = dosen.nidn', 'inner');
                 $dosen = $this->DataModel->getWhere('dosen_subkriteria.periode', $id_periode);
                 $dosen = $this->DataModel->getData('dosen')->result_array();
