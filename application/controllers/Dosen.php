@@ -19,11 +19,11 @@ class Dosen extends CI_Controller
             $profile = $this->DataModel->getWhere('id', $this->session->userdata['admin_data']['id']);
             $profile = $this->DataModel->getData('pengguna')->row();
             if ($profile->level != "superadmin") {
-                $dosen = $this->DataModel->order_by('dosen.nama','ASC');
+                $dosen = $this->DataModel->order_by('dosen.nama', 'ASC');
                 $dosen = $this->DataModel->getWhere('prodi', $profile->prodi);
                 $dosen = $this->DataModel->getData('dosen')->result_array();
             } else {
-                $dosen = $this->DataModel->order_by('dosen.nama','ASC');
+                $dosen = $this->DataModel->order_by('dosen.nama', 'ASC');
                 $dosen = $this->DataModel->getData('dosen')->result_array();
             }
             $data = array(
@@ -67,7 +67,6 @@ class Dosen extends CI_Controller
                 "profile" => $profile,
             );
             $this->load->view('pages/dosen/data_detail', $data);
-
         } else {
             redirect('admin/login');
         }
@@ -103,13 +102,13 @@ class Dosen extends CI_Controller
                     "prodi" => $prodi,
                     "jenis_kelamin" => $jk,
                 );
-                $cek = $this->DataModel->getWhere('nidn',$nidn);
+                $cek = $this->DataModel->getWhere('nidn', $nidn);
                 $cek = $this->DataModel->getData('dosen')->row();
                 // die(json_encode($cek));
-                if($cek != null){
-                    $this->DataModel->getWhere('nidn',$nidn);
-                    $this->DataModel->update('dosen',$data);
-                }else{
+                if ($cek != null) {
+                    $this->DataModel->getWhere('nidn', $nidn);
+                    $this->DataModel->update('dosen', $data);
+                } else {
                     $this->DataModel->insert("dosen", $data);
                 }
                 $dataS = array();
@@ -129,7 +128,7 @@ class Dosen extends CI_Controller
                 }
                 // die(json_encode($dataS));
                 $this->DataModel->insert_multiple("dosen_subkriteria", $dataS);
-                redirect('proses?periode='.$id_periode);
+                redirect('proses?periode=' . $id_periode);
             } else {
                 $this->load->view('pages/dosen/form_dosen', $data);
             }
@@ -138,7 +137,7 @@ class Dosen extends CI_Controller
         }
     }
 
-    
+
 
     public function import()
     {
@@ -175,7 +174,6 @@ class Dosen extends CI_Controller
                             // die("error ".pathinfo($inputFileName,PATHINFO_BASENAME).'": '.$e->getMessage());
                         }
                         $datas = [];
-                        $datas_dosen = [];
                         // var_dump($objPHPExcel->getActiveSheet()->toArray());
                         $sheet = $objPHPExcel->getActiveSheet();
                         $hr = $sheet->getHighestRow();
@@ -195,17 +193,6 @@ class Dosen extends CI_Controller
                                 "prodi" => $dataArray[0][2],
                                 "jenis_kelamin" => $dataArray[0][3],
                             );
-                            // $datas['data']['nidn'][] = $dataArray[0][0];
-                            // $datas['data'][$dataArray[0][0]]['X1'] = $dataArray[0][4];
-                            // $datas['data'][$dataArray[0][0]]['X2'] = $dataArray[0][5];
-                            // $datas['data'][$dataArray[0][0]]['X3'] = $dataArray[0][6];
-                            // $datas['data'][$dataArray[0][0]]['X4'] = $dataArray[0][7];
-                            // $datas['data'][$dataArray[0][0]]['X5'] = $dataArray[0][8];
-                            // $datas['data'][$dataArray[0][0]]['X6'] = $dataArray[0][9];
-                            // $datas['data'][$dataArray[0][0]]['X7'] = $dataArray[0][10];
-                            // $datas['data'][$dataArray[0][0]]['X8'] = $dataArray[0][11];
-                            // $datas['data'][$dataArray[0][0]]['X9'] = $dataArray[0][12];
-                            // $datas['data'][$dataArray[0][0]]['X10'] = $dataArray[0][13];
                             $datas['data'][] = array(
                                 "nidn" => $dataArray[0][0],
                                 "X1" => $dataArray[0][4],
@@ -219,39 +206,130 @@ class Dosen extends CI_Controller
                                 "X9" => $dataArray[0][12],
                                 "X10" => $dataArray[0][13],
                             );
-                            // for($row = 0; $row <= 8; $row++){
-                            //     $datass[] = array(
-                                     
-                            //     );
-                            // }
                         }
                         $dat = array();
-                        for($i=1;$i<=10;$i++){
+                        for ($i = 1; $i <= 10; $i++) {
                             $q = $this->DataModel->select('id');
-                            $q = $this->DataModel->getWhere('simbol','X'.$i);
+                            $q = $this->DataModel->getWhere('simbol', 'X' . $i);
                             $q = $this->DataModel->getData('kriteria')->row();
                             // var_dump($q);
-                            for($j=0; $j<count($datas['data']); $j++){
-                                $dat['data'][$datas['data'][$j]['nidn']][$q->id] = $datas['data'][$j]['X'.$i];
+                            for ($j = 0; $j < count($datas['data']); $j++) {
+                                $dat['data'][$datas['data'][$j]['nidn']][$q->id] = $datas['data'][$j]['X' . $i];
                                 // $dat['data'][]['bobot'][] = $datas['data'][$j]['X'.$i];
                             }
                         }
-                        die(json_encode($dat));
-
-                        for($i=0; $i<count($data_dosen['data']); $i++){
-                            for($j=0; $j<count($dat['data'][$data_dosen['data'][0]['nidn']]); $j++){
+                        // die(json_encode($data_dosen));
+                        $dat_sub = array();
+                        for ($i = 0; $i < count($data_dosen['data']); $i++) {
+                            for ($j = 0; $j < count($dat['data'][$data_dosen['data'][$i]['nidn']]); $j++) {
                                 $arr = array_keys($dat['data'][$data_dosen['data'][$i]['nidn']]);
-                                echo $arr[$j] . "<br>";
+                                $cek = $this->DataModel->getWhere('id_kriteria', $arr[$j]);
+                                $cek = $this->DataModel->getWhere('bobot', $dat['data'][$data_dosen['data'][$i]['nidn']][$arr[$j]]);
+                                $cek = $this->DataModel->getData('subkriteria')->row();
+                                // var_dump($cek);
+                                if ($cek != null) {
+                                    $ceka = $this->DataModel->getWhereArr(array("nidn" => $data_dosen['data'][$i]['nidn'], "periode" => $id_periode));
+                                    $ceka = $this->DataModel->getData('dosen_subkriteria')->result_array();
+                                    // $dat_sub[$i]["nidn"][] = $data_dosen['data'][$i]['nidn'];
+                                    // $dat_sub[$i]['id_subkriteria'][] = $cek->id;
+                                    // $dat_sub[$i]['periode'][] = $id_periode;
+                                    // $dat_sub[$i]['value'][] = 0;
+                                    $dat_sub[] = array(
+                                        "nidn" => $data_dosen['data'][$i]['nidn'],
+                                        "id_subkriteria" => $cek->id,
+                                        "periode" => $id_periode,
+                                        "value" => 0
+                                    );
+                                } else {
+                                    $sk = $this->DataModel->select('id');
+                                    $sk = $this->DataModel->getWhere('id_kriteria', $arr[$j]);
+                                    $sk = $this->DataModel->getData('subkriteria')->row();
+                                    // $dat_sub[$i]["nidn"][] = $data_dosen['data'][$i]['nidn'];
+                                    // $dat_sub[$i]['id_subkriteria'][] = $sk->id;
+                                    // $dat_sub[$i]['periode'][] = $id_periode;
+                                    // $dat_sub[$i]['value'][] = $dat['data'][$data_dosen['data'][$i]['nidn']][$arr[$j]];
+                                    $dat_sub[] = array(
+                                        "nidn" => $data_dosen['data'][$i]['nidn'],
+                                        "id_subkriteria" => $sk->id,
+                                        "periode" => $id_periode,
+                                        "value" => $dat['data'][$data_dosen['data'][$i]['nidn']][$arr[$j]]
+                                    );
+                                }
                             }
-                            // $j++;
-                            // $arr = array_keys($dat['data'][$data_dosen['data'][$i]['nidn']]);
-                            // echo $arr[$i] . "<br>";
-                            // echo $dat['data'][];
-                            // $q = $this->DataModel->select('id');
-                            // $q = $this->DataModel->getWhere($dat['data'][$data_dosen['data'][$i]['nidn']])
                         }
-                        die();
-                        die(json_encode(($data_dosen)));
+                        $aaa = 0;
+                        $data_dosub = array();
+                        foreach ($data_dosen['data'] as $key => $val) {
+                            $cek = $this->DataModel->getWhere('nidn', $val['nidn']);
+                            $cek = $this->DataModel->getData('dosen')->row();
+                            // var_dump($cek);
+                            $data = array(
+                                "nidn" => $val['nidn'],
+                                "nama" => $val['nama'],
+                                "prodi" => $val['prodi'],
+                                "jenis_kelamin" => $val['jenis_kelamin']
+                            );
+                            if ($cek != null) {
+                                $this->DataModel->getWhere('nidn', $val['nidn']);
+                                $this->DataModel->update('dosen', $data);
+                            } else {
+                                $this->DataModel->insert('dosen', $data);
+                            }
+                            $ceka = $this->DataModel->getWhereArr(array("nidn" => $val['nidn'], "periode" => $id_periode));
+                            $ceka = $this->DataModel->getData('dosen_subkriteria')->result_array();
+                            foreach($ceka as $key){
+                                $data_dosub['id'][] = $key['id'];
+                            }
+                            // var_dump($ceka);
+                            if(count($ceka) != 0){
+                                // $data_dosub = $ceka;
+                                $aaa = count($ceka);
+                            }else{
+                                $aaa = 0;
+                            }
+                        }
+                        // die(json_encode($data_dosub));
+                        $no = 0;
+                        // $i = 0;
+
+                        foreach ($dat_sub as $key) {
+                            // echo $key['nidn'] ."<br>" ;
+                            // die();
+                            // var_dump($aaa);
+                            // die(json_encode($cek));
+                            if ($aaa > 0) {
+                                // echo "kadune ana";
+                                $dat_in = array(
+                                    "nidn" => $key['nidn'],
+                                    "id_subkriteria" => $key['id_subkriteria'],
+                                    "value" => $key['value'],
+                                    "periode" => $key['periode']
+                                );
+                                // echo $data_dosub['id'][$no];
+                                // var_dump($dat_in);
+                                // $this->DataModel->getWhereArr(array("nidn" => $key['nidn'],"periode" => $key['periode']));
+                                $this->DataModel->getWhere('id',$data_dosub['id'][$no]);
+                                $this->DataModel->update('dosen_subkriteria',$dat_in);
+                                // $this->DataModel->delete_arr(array("nidn" => $key['nidn'], "periode" => $key['periode']), 'dosen_subkriteria');
+                            }else{
+                                $dat_in = array(
+                                    "nidn" => $key['nidn'],
+                                    "id_subkriteria" => $key['id_subkriteria'],
+                                    "value" => $key['value'],
+                                    "periode" => $key['periode']
+                                );
+                                // die(json_encode($dat_in));
+                                // var_dump($dat_in);
+                                // echo $dat_in;
+                                $this->DataModel->insert('dosen_subkriteria', $dat_in);
+                            }
+                            unset($dat_in);
+                            $no++;
+                        }
+                        // die();
+                        // die(json_encode($dat_sub));
+                        // die(json_encode(($data_dosen)));
+                        redirect('proses?periode='.$id_periode);
                     }
                 }
             } else {
@@ -378,5 +456,4 @@ class Dosen extends CI_Controller
             return false;
         }
     }
-
 }

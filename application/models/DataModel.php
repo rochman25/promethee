@@ -81,6 +81,12 @@ class DataModel extends CI_Model
         return $query;
     }
 
+    function delete_arr($where,$table){
+        $query = $this->db->where($where);
+        $query = $this->db->delete($table);
+        return $query;
+    }
+
     function getInsertId(){
         return $this->db->insert_id();
     }

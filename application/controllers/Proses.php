@@ -280,6 +280,7 @@ class Proses extends CI_Controller
             $cek = $this->DataModel->getWhere('prodi', $profile->prodi);
             $cek = $this->DataModel->getWhere('periode', $this->input->post('periode_id'));
             $cek = $this->DataModel->getData('hasil_seleksi')->result_array();
+            // die(json_encode($cek));
             if (!empty($cek)) {
                 $i = 0;
                 foreach ($cek as $key) {

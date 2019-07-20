@@ -62,10 +62,10 @@
                             <div class="panel-heading" style="padding-bottom: 20px">
                                 <div>
                                     Tabel Dosen
-                                    <a href="<?=base_url()?>assets/data_dosen/format.xls" class="btn btn-sm btn-info"
+                                    <a href="<?=base_url()?>assets/data_dosen/format.xlsx" class="btn btn-sm btn-info"
                                         style="float:right; margin-left:10px"><i class="fa fa-download"></i> Format
                                         Data Excel</a>
-                                    <a href="<?=base_url('dosen/import')?>" class="btn btn-sm btn-info"
+                                    <a href="<?=base_url('dosen/import')?>?periode=<?=$id_periode?>" class="btn btn-sm btn-info"
                                         style="float:right; margin-left:10px"><i class="fa fa-upload"></i> Import</a>
                                     <a href="<?=base_url('dosen/tambah')?>?periode=<?=$id_periode?>" class="btn btn-sm btn-success"
                                         style="float: right;"><i class="fa fa-plus"></i> Tambah</a>
