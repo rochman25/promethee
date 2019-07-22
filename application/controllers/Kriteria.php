@@ -145,14 +145,14 @@ class Kriteria extends CI_Controller
                 $nama_sub = $this->input->post('sub_nama');
                 $bobot_sub = $this->input->post('sub_bobot');
                 $this->form_validation->set_rules('nama', 'Nama', 'required');
-                $this->form_validation->set_rules('bobot', 'Bobot', 'required');
+                // $this->form_validation->set_rules('bobot', 'Bobot', 'required');
                 $this->form_validation->set_rules('jenis', 'Jenis', 'required');
                 if ($this->form_validation->run() == false) {
-                    $this->load->view('pages/tambah_kriteria', $data);
+                    $this->load->view('pages/kriteria/form_kriteria', $data);
                 } else {
                     $dataK = array(
                         "nama" => $nama,
-                        "bobot" => $bobot,
+                        // "bobot" => $bobot,
                         "jenis" => $jenis
                     );
                     $this->DataModel->insert('kriteria',$dataK);
