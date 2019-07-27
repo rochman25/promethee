@@ -194,8 +194,9 @@ class Proses extends CI_Controller
                         // echo $nilai_pref . "<br>";
                         // $index_pref[$key_dosen_x][$key_dosen_y] = $nilai_pref;
                         // $jarak_kriteria[$key_kriteria][$key_dosen_y]['p'][] = $nilai_pref;
-                        $h_d[$key_kriteria][$key_dosen_y][] = $nilai_pref;
+                        // $h_d[$key_kriteria][$key_dosen_y][] = $nilai_pref;
                         // if ($key_dosen_x != $key_dosen_y) {
+                            $h_d[$key_kriteria][$key_dosen_y][] = $nilai_pref;
                             // echo "tipe = " . $tipe[$value_kriteria['id']] . " " . $key_kriteria . " : " . $key_dosen_x . "-" . $key_dosen_y . " = " . $tmp_bobot_x . "-" . $tmp_bobot_y . " = " . $jka . " q = " . $q[$value_kriteria['id']] . " p = "  . $p[$value_kriteria['id']] . " p = " . $nilai_pref . "<br>";
                             $jarak_kriteria[$key_kriteria][$key_dosen_x]['a'][] = $tmp_bobot_x;
                             $jarak_kriteria[$key_kriteria][$key_dosen_x]['b'][] = $tmp_bobot_y;
@@ -224,26 +225,47 @@ class Proses extends CI_Controller
             // die();
             // die(json_encode($jarak_kriteria));
             // die(json_encode($data_calon));
+            $se1 = 0;
+            $se2 = 0;
+            $kurang = 0;
             // for ($i = 0; $i < count($data_calon['data']); $i++) {
             foreach ($data_calon['data'] as $key_dosen => $val) {
                 for ($j = 0; $j < count($data_calon['data']); $j++) {
+                    // var_dump($data_calon['data']);
+                    // die();
                     // if($i != $j){
                     $tmp_sum = 0;
                     foreach ($data_kriteria['data'] as $key => $value) {
+                        // if($key_dosen != $data_calon['data'][$key_dosen]){
+                            $tmp_sum += (1/count($data_kriteria['data'])) * $h_d[$key][$key_dosen][$j];
+                        // }   
                         // var_dump($h_d);
-                        // echo $h_d[$key]['A' . ($i + 1)][$j] . "<br>";
-                        $tmp_sum += (1 / count($data_kriteria['data'])) * $h_d[$key][$key_dosen][$j];
+                        // echo $key . " - " . $key_dosen . " = ". $h_d[$key][$key_dosen][$j] . "<br>";
+                        // echo $tmp_sum . "<br>";
+                        // if($tmp_sum == 0.1){
+                        //     $tmp_sum = 0;
+                        // }
+                        // $tmp_sum = $tmp_sum * 0.1;
                         // var_dump($h_d[$key]);
                         // echo $tmp_sum . "<br>";
                         // echo $h_d[$key]['A' . ($i + 1)][$j] . "<br>";
                     }
-                    $ranking[$key_dosen][$j] = $tmp_sum;
+                    // if($tmp_sum == 0.1){
+                    //     $tmp_sum = 0;
+                    // }
+                    $ranking[$data_calon['data'][$key_dosen]['nidn']][$j] = $tmp_sum;
+                    if($tmp_sum == 0.1){
+                        $se1 = $tmp_sum * count($data_calon['data']);
+                        $se2 = $se1 * 0.1;
+                        $kurang = $se1 * $se2;
+                    }
+                    // echo $tmp_sum . "<br>";
                     // }
                 }
                 // echo array_sum($ranking[$key_dosen]) . "<br>";
-                $hasil[$key_dosen]['entering'] = (1 / 4) * array_sum($ranking[$key_dosen]);
+                $hasil[$key_dosen]['entering'] = (1 / (count($data_calon['data']) - 1)) * array_sum($ranking[$key_dosen]) - $kurang;
             }
-            // die(json_encode($ranking));
+            // die(json_encode($hasil));
             // die();
             $j = 0;
             foreach ($data_calon['data'] as $key_d => $val) {
@@ -257,9 +279,13 @@ class Proses extends CI_Controller
                     // echo $tmp_entering . "<br>";
                     // echo $ranking[$key][$i] . "<br>";
                 }
-
+                // if($tmp_entering == 0.1){
+                //     $se1 = $tmp_entering * count($data_calon['data']);
+                //     $se2 = $se1 * 0.1;
+                //     $kurang = $se1 * $se2;
+                // }
                 // echo $tmp_entering . "<br>";
-                $hasil[$key_d]['leaving'] = (1 / 4) * $tmp_entering;
+                $hasil[$key_d]['leaving'] = (1 / (count($data_calon['data']) - 1)) * $tmp_entering - $kurang;
                 $hasil[$key_d]['net_flow'] = $hasil[$key_d]['leaving'] - $hasil[$key_d]['entering'];
                 $hasil[$key_d]['nama'] = $val['nama'];
                 $ranking_hasil[] = array(
@@ -369,7 +395,7 @@ class Proses extends CI_Controller
             case 2:
                 if ($f_jka <= $f_q) {
                     $f_np = 0;
-                } else {
+                } else if ($f_jka > $f_q){
                     $f_np = 1;
                 }
                 // die(json_encode($f_np));
@@ -382,7 +408,7 @@ class Proses extends CI_Controller
                 }
                 break;
             case 4:
-                if (abs($f_jka) > $f_p) {
+                if ($f_jka <= $f_p) {
                     $f_np = 1;
                 } else if (abs($f_jka) <= $f_q) {
                     $f_np = 0;

@@ -56,6 +56,5 @@
         if (r == true) {
             argument.parentElement.parentElement.remove();
         }
-
     }
 </script>

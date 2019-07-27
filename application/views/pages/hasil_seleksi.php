@@ -282,9 +282,11 @@
                                                                                             <td><?php echo $value['p'][$a] ?></td>
                                                                                         <?php } ?>
                                                                                     </tr>
-                                                                                <?php endforeach; ?>
-                                                                                <?php
+                                                                                <?php 
                                                                                 $a++;
+                                                                                endforeach; ?>
+                                                                                <?php
+                                                                                //$a++;
                                                                                 //$sim++;
                                                                             //endforeach;
                                                                          endforeach; ?>
