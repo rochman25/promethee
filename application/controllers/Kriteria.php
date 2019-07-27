@@ -110,7 +110,7 @@ class Kriteria extends CI_Controller
                     redirect('kriteria/detail?id='.$kriteria_id);
                 }
             }else{
-                $this->load->view('pages/subkriteria/form_subkriteria',$data);
+                $this->load->view('pages/subkriteria/ubah_subkriteria',$data);
             }
         }else{
             redirect('admin/login');
