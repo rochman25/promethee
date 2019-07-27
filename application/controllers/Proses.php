@@ -144,6 +144,7 @@ class Proses extends CI_Controller
             }
             $cek = $this->DataModel->getWhere('periode', $this->input->post('periode_id'));
             $cek = $this->DataModel->getData('input_parameter')->result_array();
+            $data_array = null;
             if (!empty($cek)) {
                 $i = 0;
                 foreach ($cek as $key) {
@@ -152,14 +153,42 @@ class Proses extends CI_Controller
                     // array_push($key,$input_parameter);
                     $i++;
                 }
+                foreach($input_parameter as $key => $val){
+                    // var_dump($val);
+                    // echo $val['id_kriteria']; 
+                    if(isset($val['id'])){
+                        $data_array = array(
+                            "id_kriteria" => $val['id_kriteria'],
+                            "tipe" => $val['tipe'],
+                            "q" => $val['q'],
+                            "p" => $val['p'],
+                            "periode" => $val['periode'],
+                            'id' => $val['id']
+                        );
+                        $query = $this->DataModel->getWhere('id',$val['id']);
+                        $query = $this->DataModel->update('input_parameter',$data_array);
+                    }else{
+                        $data_array = array(
+                            "id_kriteria" => $val['id_kriteria'],
+                            "tipe" => $val['tipe'],
+                            "q" => $val['q'],
+                            "p" => $val['p'],
+                            "periode" => $val['periode'],
+                        );
+                        $query = $this->DataModel->insert('input_parameter',$data_array);
+                    }
+                    // die(json_encode($data_array));
+                    // unset($data_array);
+                }
+                // die();
+                // die(json_encode($data_array));
                 // die(json_encode($input_parameter));
-                // die(json_encode($input_parameter));
-                $this->DataModel->update_multiple('input_parameter', $input_parameter, 'id');
+                // $this->DataModel->update_multiple('input_parameter', $input_parameter, 'id');
             } else {
                 // die(json_encode($this->input->post('periode_id')));
                 $this->DataModel->insert_multiple('input_parameter', $input_parameter);
             }
-            // die(json_encode($input_parameter));
+            // die(json_encode($data_array));
             // die(json_encode($data_calon));
             foreach ($data_kriteria['data'] as $key_kriteria => $value_kriteria) {
                 // echo $key_kriteria;
@@ -168,7 +197,7 @@ class Proses extends CI_Controller
                 $bobot = 0;
                 // echo $bobot ."<br>";
                 // var_dump($value_kriteria);
-                // die(json_encode($bobot));
+                // die(json_encode($value_kriteria));
                 $y = 1;
 
                 // Jarak Kriteria
@@ -183,6 +212,7 @@ class Proses extends CI_Controller
                         $tmp_bobot_x = $value_dosen_x['kriteria'][$key_kriteria]['nama_subkriteria'] == 'input' ? $value_dosen_x['kriteria'][$key_kriteria]['value'] : $value_dosen_x['kriteria'][$key_kriteria]['bobot_subkriteria'];
                         $jka = 0;
                         $jka = $tmp_bobot_x - $tmp_bobot_y;
+                        // die(json_encode($value_dosen_x));
                         // echo $jka . "<br>";
                         // $jarak_kriteria[$key_kriteria]['A' . $y][] = $jka;
                         // $jarak_kriteria[$key_kriteria]['A' . $y]['a'][] = $tmp_bobot_x;

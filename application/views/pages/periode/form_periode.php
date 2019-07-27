@@ -41,21 +41,32 @@
                                             <label>Nama</label>
                                         </div>
                                         <div class="col-lg-9">
-                                            <input class="form-control" type="text" name="nama" placeholder="Nama"
+                                            <input autocomplete="off" class="form-control" type="text" name="nama" placeholder="Nama"
                                                 required=""
                                                 value="<?php if(isset($data_periode)) echo $data_periode->nama; ?>">
                                                 <?=form_error('nama')?>
                                         </div>
                                     </div>
-
                                     <div class="row form-group">
+                                        <div class="col-lg-3">
+                                            <label>Keterangan (optional)</label>
+                                        </div>
+                                        <div class="col-lg-9">
+                                            <select name="keterangan" class="form-control">
+                                                <option value="">Pilih Keterangan</option>
+                                                <option value="Ganjil">Ganjil</option>
+                                                <option value="Genap">Genap</option>
+                                            </select>
+                                        </div>
+                                    </div>                                    
+                                    <!-- <div class="row form-group">
                                         <div class="col-lg-3">
                                             <label>Keterangan (optional)</label>
                                         </div>
                                         <div class="col-lg-9">
                                             <textarea class="form-control" name="keterangan" placeholder="Keterangan "><?php if(isset($data_periode)) echo $data_periode->keterangan; ?></textarea>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div id="sub"></div>
 
                                     <div class="form-group">

@@ -205,6 +205,7 @@ class Dosen extends CI_Controller
                                 "X8" => $dataArray[0][11],
                                 "X9" => $dataArray[0][12],
                                 "X10" => $dataArray[0][13],
+                                // "X11" => $dataArray[0][14]
                             );
                         }
                         $dat = array();
@@ -377,7 +378,9 @@ class Dosen extends CI_Controller
                 "profile" => $profile,
                 "mode" => "Ubah",
             );
+            // die(json_encode($data));
             if ($this->input->post('kirim')) {
+                // die(json_encode($id_periode));
                 $nidn = $this->input->get('nidn');
                 $nama = $this->input->post('nama');
                 $jk = $this->input->post('jenis_kelamin');
@@ -394,13 +397,44 @@ class Dosen extends CI_Controller
                 $this->DataModel->getWhere('nidn', $nidn);
                 $this->DataModel->update('dosen', $data);
                 $dataS = array();
+                $data_array = null;
                 $i = 0;
-                foreach ($old_sub_id as $key => $val) {
+                // die(json_encode($value));
+                foreach ($sub as $key => $val) {
                     if (isset($value[$key])) {
                         $nilai = $value[$key];
                     } else {
                         $nilai = 0;
                     }
+                    // echo $nilai . "<br>";
+                    // die();
+                    // echo $old_sub_id[$key] . "<br>";
+                    // echo $sub[$val];
+                    if(isset($old_sub_id[$key])){
+                        $data_array = array(
+                            "id" => $old_sub_id[$key],
+                            "nidn" => $nidn,
+                            "id_subkriteria" => $sub[$key],
+                            "value" => $nilai,
+                            "periode" => $id_periode  
+                        );
+                        // echo "test". "<br>";
+                        // die()
+                        $query = $this->DataModel->getWhere('id',$old_sub_id[$key]);
+                        $query = $this->DataModel->update('dosen_subkriteria',$data_array);
+                        // die(json_encode($data_array));
+                        // var_dump($data_array);
+                    }else{
+                        $data_array = array(
+                            "nidn" => $nidn,
+                            "id_subkriteria" => $sub[$key],
+                            "value" => $nilai,
+                            "periode" => $id_periode  
+                        );
+                        $query = $this->DataModel->insert('dosen_subkriteria',$data_array);
+                        // die(json_encode($data_array));
+                    }
+                    unset($data_array);
                     $dataS[$i]['id'] = $val;
                     $dataS[$i]['nidn'] = $nidn;
                     $dataS[$i]['id_subkriteria'] = $sub[$key];
@@ -408,6 +442,7 @@ class Dosen extends CI_Controller
                     $dataS[$i]['periode'] = $id_periode;
                     $i++;
                 }
+                // die();
                 if (!empty($new_sub_id)) {
                     foreach ($new_sub_id as $key => $val) {
                         if (isset($value[$key])) {
@@ -420,12 +455,13 @@ class Dosen extends CI_Controller
                         $dataS[$i]['value'] = $nilai;
                         $dataS[$i]['periode'] = $id_periode;
                         $i++;
+
                     }
-                    $this->DataModel->insert_multiple("dosen_subkriteria", $dataS);
+                    // $this->DataModel->insert_multiple("dosen_subkriteria", $dataS);
                 }
-                $this->DataModel->update_multiple("dosen_subkriteria", $dataS, "id");
-                redirect('dosen/ubah?nidn=' . $nidn);
-                // die(json_encode($dataS));
+                // $this->DataModel->update_multiple("dosen_subkriteria", $dataS, "id");
+                redirect('dosen/ubah?nidn=' . $nidn . "&periode=".$id_periode);
+                // die(json_encode($new_sub_id));
             } else {
                 // die(json_encode($data));
                 $this->load->view('pages/dosen/form_dosen', $data);

@@ -83,7 +83,7 @@
                                                         <td><?php echo $sub['nama_subkriteria']; ?></td>
                                                         <td><?php echo $sub['bobot_subkriteria']; ?></td>
                                                         <td>
-                                                            <?php if ($profile->level=='superadmin'){ ?>
+                                                            <?php if ($profile->level=='superadmin' || $profile->level == 'admin'){ ?>
 
                                                             <a href="<?=base_url()?>kriteria/ubah_sub?id=<?php echo $sub['subkriteria_id'] ?>&kriteria_id=<?php echo $data_kriteria[0]['id']?>"
                                                                 class="btn btn-xs btn-warning" title="Ubah">
