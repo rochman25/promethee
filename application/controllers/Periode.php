@@ -20,6 +20,7 @@ class Periode extends CI_Controller
                 "profile" => $profile,
                 "datas" => $periode
             );
+            // die();
             $this->load->view('pages/periode/data',$data);
 
         }else{
