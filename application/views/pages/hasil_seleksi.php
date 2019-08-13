@@ -25,7 +25,7 @@
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-info">
                         <div class="panel-heading" style="padding-bottom: 20px">
@@ -33,7 +33,7 @@
                                 <h4>Tabel Normalisasi Bobot Kriteria</h4>
                             </div>
                         </div>
-                        <!-- /.panel-heading -->
+
                         <div class="panel-body">
                             <div class="col-lg-12">
                                 <table class="table table-bordered">
@@ -41,7 +41,6 @@
                                         <tr>
                                             <th rowspan="2" style="vertical-align: middle;">No</th>
                                             <th rowspan="2" style="vertical-align: middle;">Kriteria</th>
-                                            <!-- <th rowspan="2" style="vertical-align: middle;">Bobot</th> -->
                                             <th rowspan="2" style="vertical-align: middle;">Jenis</th>
                                             <th width="100" rowspan="2" style="vertical-align: middle;">Tipe</th>
                                             <th colspan="2" style="text-align: center">Parameter</th>
@@ -57,10 +56,6 @@
                                             <tr>
                                                 <td><?php echo $x++ ?></td>
                                                 <td><?php echo $key ?></td>
-                                                <!-- <td><?php //echo $value['bobot'] 
-                                                            ?></td> -->
-                                                <!-- <td><?php //echo $value['bobot'] / $data_kriteria['ekstra']['total_bobot']; 
-                                                            ?> -->
                                                 </td>
                                                 <td><?php echo $value['jenis'] ?></td>
                                                 <td>
@@ -78,11 +73,9 @@
                                 </table>
                             </div>
                         </div>
-                        <!-- /.panel-body -->
                     </div>
-                    <!-- /.panel -->
                 </div>
-            </div>
+            </div> -->
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel-group">

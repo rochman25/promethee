@@ -72,7 +72,7 @@ class Proses extends CI_Controller
     public function seleksi()
     {
         if ($this->_isLoggedIn()) {
-            $id_periode = $this->input->post('periode_id');
+            $id_periode = $this->input->get('periode');
             $profile = $this->DataModel->getWhere('id', $this->session->userdata['admin_data']['id']);
             $profile = $this->DataModel->getData('pengguna')->row();
             $kriteria = $this->DataModel->distinct('*');
@@ -118,11 +118,28 @@ class Proses extends CI_Controller
             $data_calon = $datas;
             unset($datas);
 
-            $tipe = $this->input->post('tipe');
-            $q = $this->input->post('q');
-            $p = $this->input->post('p');
-            $id_kriteria = $this->input->post('id_kriteria');
-            // die(json_encode($q));
+            // $tipe = $this->input->post('tipe');
+            // $q = $this->input->post('q');
+            // $p = $this->input->post('p');
+            // $id_kriteria = $this->input->post('id_kriteria');
+            $tipe = [];
+            $q = [];
+            $p = [];
+            $id_kriteria = [];
+
+            $ip = $this->DataModel->getWhere('periode', $this->input->get('periode'));
+            $ip = $this->DataModel->getData('input_parameter')->result_array();
+
+            foreach($ip as $Key => $val){
+                // die(json_encode($val));
+                $q[$val['id_kriteria']] = $val['q'];
+                $p[$val['id_kriteria']] = $val['p'];
+                $tipe[$val['id_kriteria']] = $val['tipe'];
+                $id_kriteria[$val['id_kriteria']] = $val['id_kriteria'];
+            }
+
+
+            // die(json_encode($id_kriteria));
             $jarak_kriteria = [];
             $h_d = [];
             $ranking = [];
@@ -139,10 +156,11 @@ class Proses extends CI_Controller
                     "tipe" => $tipe[$key],
                     "q" => $val,
                     "p" => $p[$key],
-                    "periode" => $this->input->post('periode_id')
+                    "periode" => $this->input->get('periode')
                 );
             }
-            $cek = $this->DataModel->getWhere('periode', $this->input->post('periode_id'));
+            // die(json_encode($input_parameter));
+            $cek = $this->DataModel->getWhere('periode', $this->input->get('periode'));
             $cek = $this->DataModel->getData('input_parameter')->result_array();
             $data_array = null;
             if (!empty($cek)) {
@@ -189,7 +207,7 @@ class Proses extends CI_Controller
                 $this->DataModel->insert_multiple('input_parameter', $input_parameter);
             }
             // die(json_encode($data_array));
-            // die(json_encode($data_calon));
+            // die(json_encode($data_kriteria));
             foreach ($data_kriteria['data'] as $key_kriteria => $value_kriteria) {
                 // echo $key_kriteria;
                 // $bobot = $value_kriteria['bobot'] / $data_kriteria['ekstra']['total_bobot'];

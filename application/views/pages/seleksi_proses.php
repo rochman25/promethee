@@ -112,7 +112,7 @@
                                     </div>
                                     <?php if (count($dosen) > 1) { ?>
                                         <div class="col">
-                                            <form action="" method="POST">
+                                            <form action="<?=base_url()?>proses/seleksi?periode=<?=$id_periode?>" method="POST">
                                                 <input type="hidden" name="periode" value="<?= $id_periode ?>">
                                                 <center><input type="submit" name="proses" class="btn btn-lg btn-primary" value="Proses"></center>
                                             </form>
@@ -130,7 +130,7 @@
                 </div>
 
             </div>
-        <?php } else if ($this->input->post('proses')) { ?>
+        <?php } else if ($this->input->post('proseass')) { ?>
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Seleksi Dosen Berprestasi</h1>
@@ -148,7 +148,7 @@
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <form action="<?= base_url() ?>proses/seleksi" method="POST">
+                            <form action="<?= base_url() ?>proses/seleksi?periode=<?=$id_periode?>" method="POST">
                                 <div class="col-lg-12">
                                     <table class="table table-bordered">
                                         <thead>
